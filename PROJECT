@@ -1,0 +1,11 @@
+domain: wise2c.com
+multigroup: true
+repo: operator/caches
+resources:
+- group: caches
+  kind: Redis
+  version: v1
+- group: caches
+  kind: Memcache
+  version: v1
+version: "2"

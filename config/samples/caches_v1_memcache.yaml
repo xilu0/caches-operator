@@ -1,0 +1,7 @@
+apiVersion: caches.wise2c.com/v1
+kind: Memcache
+metadata:
+  name: memcache-sample
+spec:
+  # Add fields here
+  image: memcache

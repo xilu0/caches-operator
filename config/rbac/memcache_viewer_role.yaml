@@ -1,0 +1,20 @@
+# permissions for end users to view memcaches.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: memcache-viewer-role
+rules:
+- apiGroups:
+  - caches.wise2c.com
+  resources:
+  - memcaches
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - caches.wise2c.com
+  resources:
+  - memcaches/status
+  verbs:
+  - get
