@@ -27,7 +27,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	cachesv1 "operator/caches/apis/caches/v1"
+	databasesv1 "operator/caches/apis/databases/v1"
 	cachescontroller "operator/caches/controllers/caches"
+	databasescontroller "operator/caches/controllers/databases"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -40,6 +42,7 @@ func init() {
 	_ = clientgoscheme.AddToScheme(scheme)
 
 	_ = cachesv1.AddToScheme(scheme)
+	_ = databasesv1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -80,6 +83,38 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Memcache")
+		os.Exit(1)
+	}
+	if err = (&databasescontroller.MysqlReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Mysql"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Mysql")
+		os.Exit(1)
+	}
+	if err = (&databasescontroller.ElasticsearchReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Elasticsearch"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Elasticsearch")
+		os.Exit(1)
+	}
+	if err = (&databasescontroller.PostgresqlReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Postgresql"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Postgresql")
+		os.Exit(1)
+	}
+	if err = (&databasescontroller.MongodbReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Mongodb"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Mongodb")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder
